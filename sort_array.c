@@ -41,7 +41,7 @@ int main(){
     {
         printf(" %d ", arr[arr_sort[i]]);
     }
-    /* Or you can print decrease numberrring
+    /* Or you can print decrease numberring
     for(i = number - 1; i >= 0; i--) 
     {
         printf(" %d ", arr[arr_sort[i]]);
