@@ -47,5 +47,6 @@ int main(){
         printf(" %d ", arr[arr_sort[i]]);
     }
     */
+    return 0; /* Return value */
 
 }
