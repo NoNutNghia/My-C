@@ -49,19 +49,19 @@ int main(){
                 data(plist);
                 return 3;
             }
-            else printf("\nEnter your choice again: ");
-        }while(1)
+            else printf("\nEnter your choice again!\n");
+        }while(1);
     }while(1);
     free(plist);
     return 0;
 }
 
-void input_data(plist){
-    var i;
+void input_data(Person *plist){
+    int i;
     do{
         printf("Enter number of people: ");
         scanf(" %d", &number);
-    }while(number > 0);
+    }while(number < 0);
     plist = realloc(plist, number * sizeof(Person));
     for(i = 0; i < number; i++){
         printf("Enter person %d: \n", i + 1);
@@ -77,14 +77,14 @@ void input_data(plist){
         }while(1);
         do{
             printf("Net worth: ");
-            scanf(" %d", &plist[i].net_worth);
+            scanf(" %f", &plist[i].net_worth);
             if ( plist[i].net_worth < 1 || plist[i].net_worth > 100 ) printf("You must enter a value between 100!\n");
             else break;
         }while(1);
     }
 }
 
-void sort_data(plist){
+void sort_data(Person *plist){
     int arr_sort[number];
     int i, j, temp;
     for(i = 0; i < number; i++){
@@ -101,10 +101,10 @@ void sort_data(plist){
     }
     printf("Sort: \n");
     printf("+------------------------------------------------------------------------------------------+\n");
-    printf("|%-24s|%-24s|%-15s|%-24s|\n", Person Name, Nationality, Birth Year, Net Worth (billion $));
+    printf("|%-24s|%-24s|%-15s|%-24s|\n", "Person Name", "Nationality", "Birth Year", "Net Worth (billion $)");
     printf("+------------------------------------------------------------------------------------------+\n");
     for(i = 0; i < number; i++){
-        printf("|%-24s|%-24s|%-15d|%-24.2f|", plist[arr_sort[i]].name,
+        printf("|%-24s|%-24s|%-15d|%-24.2f|\n", plist[arr_sort[i]].name,
                                               plist[arr_sort[i]].nationality,
                                               plist[arr_sort[i]].birth_year,
                                               plist[arr_sort[i]].net_worth);
@@ -112,7 +112,7 @@ void sort_data(plist){
     }
 }
 
-void analyze_data(plist){
+void analyze_data(Person *plist){
     int arr_analyze[number];
     int i, j;
     int count = 1;
@@ -127,18 +127,18 @@ void analyze_data(plist){
                     count++;
                 }
             }
-            printf( "There are %d person(s) from '%s'. \n". count, plist[i].nationality);
+            printf("There are %d person(s) from '%s'. \n", count, plist[i].nationality);
             count = 1;
         }
     }    
 }
 
-void find_data(plist){
+void find_data(Person *plist){
     float min_networth;
     int i, ret;
     char find_nationality[25];
     printf("Enter nationality you want to check: ");
-    scanf("%24[^\n]%*c", &find_nationality);
+    scanf(" %24[^\n]%*c", &find_nationality);
     do{
         printf("Enter the min net worth: ");
         scanf(" %f", &min_networth);
@@ -147,13 +147,13 @@ void find_data(plist){
     }while(1);
     printf("Result: \n");
     printf("+------------------------------------------------------------------------------------------+\n");
-    printf("|%-24s|%-24s|%-15s|%-24s|\n", Person Name, Nationality, Birth Year, Net Worth (billion $));
+    printf("|%-24s|%-24s|%-15s|%-24s|\n", "Person Name", "Nationality", "Birth Year", "Net Worth (billion $)");
     printf("+------------------------------------------------------------------------------------------+\n");
     for(i = 0; i < number; i++){
         ret = strcmp( plist[i].nationality, find_nationality);
         if(ret == 0){
             if( min_networth < plist[i].net_worth ){
-                printf("|%-24s|%-24s|%-15d|%-24.2f|", plist[i].name,
+                printf("|%-24s|%-24s|%-15d|%-24.2f|\n", plist[i].name,
                                               plist[i].nationality,
                                               plist[i].birth_year,
                                               plist[i].net_worth);
@@ -163,7 +163,7 @@ void find_data(plist){
     }
 }
 
-void save_data(plist){
+void save_data(Person *plist){
     char file_name[256];
     int i;
     printf("Enter file name you want to save: ");
@@ -174,9 +174,9 @@ void save_data(plist){
         printf("Can not save file!");
     } else{
         for(i = 0; i < number; i++){
-            fwrite(plist, sizeof(Person), 1, file_name);
+            fwrite(plist + i, sizeof(Person), 1, fw);
         }
-        printf("Save succeeded");
+        printf("Save succeeded!\n");
     }
     fclose(fw);
 }
@@ -189,11 +189,11 @@ void open_data(){
     FILE *fr = NULL;
     fr = fopen(file_name, "rb");
     if( !fr ){
-        printf("Can not open file!");
+        printf("Can not open file!\n");
     } else{
         Person *pdata = (Person *) malloc(number * sizeof(Person));
         for(i = 0; i < number; i++){
-            fread(pdata, sizeof(Person), 1, file_name);
+            fread(pdata + i, sizeof(Person), 1, fr);
         }
         data(pdata);
         free(pdata);
@@ -217,13 +217,13 @@ void choice(){
     printf("Your choice: ");
 }
 
-void data(plist){
-    var i;
+void data(Person *plist){
+    int i;
     printf("+------------------------------------------------------------------------------------------+\n");
-    printf("|%-24s|%-24s|%-15s|%-24s|\n", Person Name, Nationality, Birth Year, Net Worth (billion $));
+    printf("|%-24s|%-24s|%-15s|%-24s|\n", "Person Name", "Nationality", "Birth Year", "Net Worth (billion $)");
     printf("+------------------------------------------------------------------------------------------+\n");
     for(i = 0; i < number; i++){
-        printf("|%-24s|%-24s|%-15d|%-24.2f|", plist[i].name,
+        printf("|%-24s|%-24s|%-15d|%-24.2f|\n", plist[i].name,
                                               plist[i].nationality,
                                               plist[i].birth_year,
                                               plist[i].net_worth);
@@ -231,7 +231,7 @@ void data(plist){
     }
 }
 
-void processNumChoice(plist, num_choice){
+void processNumChoice(Person *plist,int num_choice){
     if (num_choice == 1) input_data(plist);
     if (num_choice == 2) sort_data(plist);
     if (num_choice == 3) analyze_data(plist);
